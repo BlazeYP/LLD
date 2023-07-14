@@ -45,7 +45,7 @@ public class Main {
 
         //Initialise services
         BoardService boardService = new BoardServiceImpl(board);
-        GameService gameService = new GameServiceImpl(board, playerList, boardService);
+        GameService gameService = new GameServiceImpl(playerList, boardService);
 
         //Starting game
         gameService.initialise();

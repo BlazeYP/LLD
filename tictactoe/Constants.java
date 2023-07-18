@@ -1,6 +1,6 @@
 package tictactoe;
 
 public interface Constants {
-    String separator = " ";
+    String separator = " | ";
     String RESTART = "restart";
 }

@@ -2,5 +2,8 @@ package tictactoe.model;
 
 public enum Piece {
     X,
-    O
+    O,
+    $,
+    Z,
+    A,
 }

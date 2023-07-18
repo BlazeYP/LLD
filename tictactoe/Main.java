@@ -1,5 +1,6 @@
 package tictactoe;
 
+import tictactoe.errors.InputParseException;
 import tictactoe.model.Board;
 import tictactoe.model.Piece;
 import tictactoe.model.Player;
@@ -12,6 +13,7 @@ import tictactoe.serviceImpl.GameServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
     private static int noOfPlayers;
@@ -20,19 +22,26 @@ public class Main {
     private static List<Player> getPlayerDetails(){
         System.out.print("Enter the number of players, max number of player is 5: ");
         noOfPlayers = Math.min(scanner.nextInt(),5);
+        scanner.nextLine();
 
         List<Player> playerList = new ArrayList<>();
 
-        for(int count=0; count<noOfPlayers; count++){
-            System.out.print("Enter "+ count + "player name: ");
-            Player p = new Player(scanner.nextLine(), Piece.values()[count]);
+        for(int count=1; count<=noOfPlayers; count++){
+            System.out.print("Enter "+ count + " player name: ");
+            Player p = new Player(scanner.nextLine(), Piece.values()[count-1]);
             playerList.add(p);
         }
         return playerList;
     }
 
-    private static Position parseInputToPosition(String s){
-        return null;
+    private static Position parseInputToPosition(String s) throws InputParseException {
+        StringTokenizer tokenizer = new StringTokenizer(s, ",");
+        if(tokenizer.countTokens() != 2 ){
+            throw new InputParseException("ERROR | Wrong Input provided, try again!");
+        }
+        int x = Integer.parseInt(tokenizer.nextToken().trim());
+        int y = Integer.parseInt(tokenizer.nextToken().trim());
+        return new Position(x,y);
     }
 
     public static void main(String[] args) {
@@ -40,7 +49,9 @@ public class Main {
         List<Player> playerList = getPlayerDetails();
 
         //Get board size
+        System.out.print("Enter playing board size: ");
         int boardSize = scanner.nextInt();
+        scanner.nextLine();
         Board board = new Board(boardSize);
 
         //Initialise services
@@ -51,16 +62,30 @@ public class Main {
         gameService.initialise();
         gameService.start();
 
-        while(!gameService.isOver()){
+        while(true){
+            gameService.showTurn();
             System.out.println("Enter the position as x,y or write 'restart': ");
             String s = scanner.nextLine();
             if(Constants.RESTART.equals(s)){
                 gameService.restart();
+                continue;
             }
-            Position position = parseInputToPosition(s);
-            gameService.makeMove(position);
+            try {
+                Position position = parseInputToPosition(s);
+                gameService.makeMove(position);
+                if(gameService.isOver()){
+                    break;
+                }
+            }
+            catch( Exception e){
+                System.out.println(e.getMessage());
+            }
         }
-
-        System.out.printf("Winner is player %s!", gameService.getWinner().getName());
+        Player p = gameService.getWinner();
+        if(p != null) {
+            System.out.printf("%s wins!", p.getName());
+        } else {
+            System.out.println("It's a tie!");
+        }
     }
 }

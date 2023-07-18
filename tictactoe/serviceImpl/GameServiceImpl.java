@@ -141,7 +141,8 @@ public class GameServiceImpl implements GameService {
             return true;
         }
 
-        return false;
+        //Checking for tie
+        return this.boardService.isBoardFull();
     }
 
     @Override

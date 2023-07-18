@@ -10,4 +10,5 @@ public interface BoardService {
     void resetBoard();
     int getBoardSize();
     Piece getPiece(Position p) throws Exception;
+    boolean isBoardFull();
 }

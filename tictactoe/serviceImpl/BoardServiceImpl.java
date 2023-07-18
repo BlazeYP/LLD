@@ -79,6 +79,11 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
+    @Override
+    public boolean isBoardFull() {
+        return this.occupiedPositions.size() == this.board.getSize() * this.board.getSize();
+    }
+
     private List<Position> getOccupiedPositions(Board board){
         List<Position> occupiedPositions = new ArrayList<>();
         for(int rowNo=0; rowNo< board.getSize(); rowNo++){

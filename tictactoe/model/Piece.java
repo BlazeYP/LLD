@@ -5,5 +5,5 @@ public enum Piece {
     O,
     $,
     Z,
-    A,
+    A
 }

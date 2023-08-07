@@ -1,4 +1,4 @@
-package tictactoe.errors;
+package tictactoe.exceptions;
 
 public class InputParseException extends Exception{
 

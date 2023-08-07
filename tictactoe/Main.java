@@ -1,6 +1,6 @@
 package tictactoe;
 
-import tictactoe.errors.InputParseException;
+import tictactoe.exceptions.InputParseException;
 import tictactoe.model.Board;
 import tictactoe.model.Piece;
 import tictactoe.model.Player;

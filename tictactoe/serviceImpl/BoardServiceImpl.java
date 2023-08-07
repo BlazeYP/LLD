@@ -1,8 +1,8 @@
 package tictactoe.serviceImpl;
 
 import tictactoe.Constants;
-import tictactoe.errors.InvalidPositionException;
-import tictactoe.errors.UnableToAddException;
+import tictactoe.exceptions.InvalidPositionException;
+import tictactoe.exceptions.UnableToAddException;
 import tictactoe.model.Board;
 import tictactoe.model.Piece;
 import tictactoe.model.Position;

@@ -33,7 +33,7 @@ public class GameServiceImpl implements GameService {
             int jumpSize = this.getJumpSize();
             int nextPosition = this.boardService.getFinalPosition(currentPlayer.getPosition() + jumpSize);
             //Print the move
-            System.out.printf("%s rolled a %s and moved from %s to %s", currentPlayer.getName(), jumpSize, currentPlayer.getPosition(), nextPosition);
+            System.out.printf("\n%s rolled a %s and moved from %s to %s\n", currentPlayer.getName(), jumpSize, currentPlayer.getPosition(), nextPosition);
             currentPlayer.setPosition(nextPosition);
             // Check if game is over
             if(isGameOver(currentPlayer)){

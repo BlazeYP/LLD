@@ -29,12 +29,12 @@ public class BoardServiceImplManual implements BoardService {
         System.out.print("Enter snake count: ");
         int snakeCount = this.scanner.nextInt();
         System.out.println("Enter snake positions: ");
-        List<Snake> snakeList = new ArrayList<>(snakeCount);
+        List<Snake> snakeList = new ArrayList<>();
         for(int count=0; count<snakeCount; count++ ){
             int start = this.scanner.nextInt();
             int end = this.scanner.nextInt();
             Snake snake = new Snake(start, end);
-            snakeList.set(count, snake);
+            snakeList.add(snake);
         }
 
         return snakeList;
@@ -49,7 +49,7 @@ public class BoardServiceImplManual implements BoardService {
             int start = this.scanner.nextInt();
             int end = this.scanner.nextInt();
             Ladder ladder = new Ladder(start, end);
-            ladderList.set(count, ladder);
+            ladderList.add(ladder);
         }
 
         return ladderList;

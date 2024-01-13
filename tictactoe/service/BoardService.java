@@ -7,7 +7,7 @@ public interface BoardService {
     void initialise();
     void addPiece(Position position, Piece piece) throws Exception;
     void printBoard();
-    void resetBoard();
+    void reset();
     int getBoardSize();
     Piece getPiece(Position p) throws Exception;
     boolean isBoardFull();

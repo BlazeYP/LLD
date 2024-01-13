@@ -39,9 +39,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public void restart() {
         //Reset board
-        this.boardService.resetBoard();
+        this.boardService.reset();
         //Reset player Deque
-        this.initialise();
+        this.playerDeque = new ArrayDeque<>();
+        for(Player p : this.playerList){
+            this.playerDeque.addLast(p);
+        }
         this.start();
     }
 
@@ -61,86 +64,67 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public boolean isOver() {
-        int boardSize = this.boardService.getBoardSize();
-        Map<Piece, Integer> freqMap = new HashMap<>();
-
-        //Checking rows
+        int boardSize = this.boardService.getBoardSize(), row, col;
         try {
-            for (int row = 0; row < boardSize; row++) {
-                for (int col = 0; col < boardSize; col++) {
+            //Checking rows
+            for (row = 0; row < boardSize; row++) {
+                // Getting First piece of each row
+                Piece firstPiece = this.boardService.getPiece(new Position(row, 0));
+                for (col = 0; col < boardSize; col++) {
                     Piece piece = this.boardService.getPiece(new Position(row, col));
-                    if(freqMap.containsKey(piece)){
-                        freqMap.put(piece, freqMap.get(piece) + 1);
-                    } else {
-                        freqMap.put(piece, 1);
+                    if (piece == null || firstPiece != piece) {
+                        break;
                     }
                 }
-                if(searchWinner(freqMap)){
+                if (col == boardSize) {
+                    this.winnerPiece = firstPiece;
                     return true;
                 }
-                setMapFreqToZero(freqMap);
             }
-        } catch (Exception e){
 
-        }
-
-        //Checking cols
-        try {
-            for (int col = 0; col < boardSize; col++) {
-                for (int row = 0; row < boardSize; row++) {
+            //Checking cols
+            for (col = 0; col < boardSize; col++) {
+                // Getting First piece of each col
+                Piece firstPiece = this.boardService.getPiece(new Position(0, col));
+                for (row = 0; row < boardSize; row++) {
                     Piece piece = this.boardService.getPiece(new Position(row, col));
-                    if(freqMap.containsKey(piece)){
-                        freqMap.put(piece, freqMap.get(piece) + 1);
-                    } else {
-                        freqMap.put(piece, 1);
+                    if (piece == null || firstPiece != piece) {
+                        break;
                     }
                 }
-                if(searchWinner(freqMap)){
+                if (row == boardSize) {
+                    this.winnerPiece = firstPiece;
                     return true;
                 }
-                setMapFreqToZero(freqMap);
             }
-        } catch (Exception e){
 
-        }
-
-        //Checking Left Diagonal
-        try {
-            for (int idx = 0; idx < boardSize; idx++) {
-                Piece piece = this.boardService.getPiece(new Position(idx, idx));
-                if(freqMap.containsKey(piece)){
-                    freqMap.put(piece, freqMap.get(piece) + 1);
-                } else {
-                    freqMap.put(piece, 1);
+            //Checking Left Diagonal
+            Piece firstPiece = this.boardService.getPiece(new Position(0, 0));
+            for (row = 0; row < boardSize; row++) {
+                Piece piece = this.boardService.getPiece(new Position(row, row));
+                if (piece == null || firstPiece != piece) {
+                    break;
                 }
-
             }
-        } catch (Exception e){
+            if (row == boardSize) {
+                this.winnerPiece = firstPiece;
+                return true;
+            }
 
-        }
-        if(searchWinner(freqMap)){
-            return true;
-        }
-        setMapFreqToZero(freqMap);
-
-        //Checking Right Diagonal
-        try {
-            for (int idx = 0; idx < boardSize; idx++) {
-                Piece piece = this.boardService.getPiece(new Position(idx, boardSize -idx -1));
-                if(freqMap.containsKey(piece)){
-                    freqMap.put(piece, freqMap.get(piece) + 1);
-                } else {
-                    freqMap.put(piece, 1);
+            //Checking Right Diagonal
+            for (row = 0; row < boardSize; row++) {
+                Piece piece = this.boardService.getPiece(new Position(row, boardSize - row - 1));
+                if (piece == null || firstPiece != piece) {
+                    break;
                 }
-
+            }
+            if (row == boardSize) {
+                this.winnerPiece = firstPiece;
+                return true;
             }
         } catch (Exception e){
 
         }
-        if(searchWinner(freqMap)){
-            return true;
-        }
-
         //Checking for tie
         return this.boardService.isBoardFull();
     }
@@ -153,22 +137,5 @@ public class GameServiceImpl implements GameService {
             }
         }
         return null;
-    }
-
-    private void setMapFreqToZero(Map<Piece, Integer> freqMap){
-        for(Map.Entry<Piece, Integer> entry : freqMap.entrySet()){
-            entry.setValue(0);
-        }
-    }
-
-    private boolean searchWinner(Map<Piece, Integer> freqMap){
-        int boardSize = this.boardService.getBoardSize();
-        for(Map.Entry<Piece, Integer> entry : freqMap.entrySet()){
-            if(entry.getKey() != null && entry.getValue().equals(boardSize)){
-                this.winnerPiece = entry.getKey();
-                return true;
-            }
-        }
-        return false;
     }
 }

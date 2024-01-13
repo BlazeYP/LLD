@@ -2,7 +2,7 @@ package tictactoe.serviceImpl;
 
 import tictactoe.Constants;
 import tictactoe.exceptions.InvalidPositionException;
-import tictactoe.exceptions.UnableToAddException;
+import tictactoe.exceptions.AlreadyOccupiedException;
 import tictactoe.model.Board;
 import tictactoe.model.Piece;
 import tictactoe.model.Position;
@@ -32,7 +32,7 @@ public class BoardServiceImpl implements BoardService {
                 this.board.getGrid()[position.getX()][position.getY()] = piece;
                 this.occupiedPositions.add(position);
             } else {
-                throw new UnableToAddException("ERROR | Already occupied position!");
+                throw new AlreadyOccupiedException("ERROR | Already occupied position!");
             }
         } else {
             throw new InvalidPositionException("ERROR | Invalid Position to add on!");
@@ -56,13 +56,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void resetBoard() {
+    public void reset() {
         int size = this.board.getSize();
         for(int row=0; row<size; row++){
             for(int col=0; col<size; col++) {
                 this.board.getGrid()[row][col] = null;
             }
         }
+        this.initialise();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class BoardServiceImpl implements BoardService {
         if(isPositionValid(p)){
             return this.board.getGrid()[p.getX()][p.getY()];
         } else {
-            throw new InvalidPositionException("ERROR | Invalid position !");
+            throw new InvalidPositionException("ERROR | Invalid position to access!");
         }
     }
 

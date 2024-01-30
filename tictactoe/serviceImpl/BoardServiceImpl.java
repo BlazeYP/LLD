@@ -22,7 +22,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void initialise() {
-        this.occupiedPositions = this.getOccupiedPositions(board);
+        this.occupiedPositions = this.getOccupiedPositions();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class BoardServiceImpl implements BoardService {
         return this.occupiedPositions.size() == this.board.getSize() * this.board.getSize();
     }
 
-    private List<Position> getOccupiedPositions(Board board){
+    private List<Position> getOccupiedPositions(){
         List<Position> occupiedPositions = new ArrayList<>();
         for(int rowNo=0; rowNo< board.getSize(); rowNo++){
             for(int colNo=0; colNo < board.getSize(); colNo++ ){

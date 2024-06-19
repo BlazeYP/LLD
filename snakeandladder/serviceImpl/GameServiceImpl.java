@@ -22,6 +22,34 @@ public class GameServiceImpl implements GameService {
     @Override
     public void initialise() {
         this.boardService.initialise();
+        this.getPlayerList();
+        this.getDiceList();
+    }
+
+    private void getDiceList() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of dices: ");
+        int diceCount = sc.nextInt();
+        sc.nextLine();
+        List<Dice> diceList = new ArrayList<>();
+        for(int count=0; count<diceCount; count++){
+            Dice dice = new DiceImpl();
+            diceList.add(dice);
+        }
+    }
+
+    private void getPlayerList() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the number of players: ");
+        int playerCount = sc.nextInt();
+        sc.nextLine();
+        this.playerList = new ArrayDeque<>();
+        for(int count=0; count<playerCount; count++){
+            System.out.printf("Enter %s player name: ", count);
+            String name = sc.nextLine();
+            Player player = new Player(name);
+            playerList.add(player);
+        }
     }
 
 
@@ -33,7 +61,7 @@ public class GameServiceImpl implements GameService {
             int jumpSize = this.getJumpSize();
             int nextPosition = this.boardService.getFinalPosition(currentPlayer.getPosition() + jumpSize);
             //Print the move
-            System.out.printf("\n%s rolled a %s and moved from %s to %s\n", currentPlayer.getName(), jumpSize, currentPlayer.getPosition(), nextPosition);
+            System.out.printf("\n%s rolled %s and moved from %s to %s\n", currentPlayer.getName(), jumpSize, currentPlayer.getPosition(), nextPosition);
             currentPlayer.setPosition(nextPosition);
             // Check if game is over
             if(isGameOver(currentPlayer)){

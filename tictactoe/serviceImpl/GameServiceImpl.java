@@ -123,7 +123,7 @@ public class GameServiceImpl implements GameService {
                 return true;
             }
         } catch (Exception e){
-
+            System.out.println(e.getMessage());
         }
         //Checking for tie
         return this.boardService.isBoardFull();

@@ -27,7 +27,7 @@ public class Main {
         List<Player> playerList = new ArrayList<>();
 
         for(int count=1; count<=noOfPlayers; count++){
-            System.out.print("Enter {} player name which takes '{}' piece".formatted(count, Piece.values()[count-1]));
+            System.out.println("Enter %d player name which takes '%s' piece".formatted(count, Piece.values()[count-1].toString()));
             Player p = new Player(scanner.nextLine(), Piece.values()[count-1]);
             playerList.add(p);
         }

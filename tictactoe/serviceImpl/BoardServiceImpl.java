@@ -46,9 +46,10 @@ public class BoardServiceImpl implements BoardService {
         for(int row=0; row<size; row++){
             for(int col=0; col<size; col++){
                 if(null != this.board.getGrid()[row][col]) {
-                    System.out.print(this.board.getGrid()[row][col]);
+                    System.out.print(Constants.SEPARATOR + this.board.getGrid()[row][col] + Constants.SEPARATOR);
+                } else {
+                    System.out.print(Constants.SEPARATOR + Constants.EMPTY_CELL_SIGNIFIER + Constants.SEPARATOR);
                 }
-                System.out.print(Constants.separator);
             }
             System.out.println();
         }

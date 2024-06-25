@@ -1,7 +1,7 @@
-package tictactoe.service;
+package tictactoe.services;
 
-import tictactoe.model.Player;
-import tictactoe.model.Position;
+import tictactoe.models.Player;
+import tictactoe.models.Position;
 
 public interface GameService {
     void initialise();

@@ -1,10 +1,10 @@
 package tictactoe.serviceImpl;
 
-import tictactoe.model.Piece;
-import tictactoe.model.Player;
-import tictactoe.model.Position;
-import tictactoe.service.BoardService;
-import tictactoe.service.GameService;
+import tictactoe.models.Piece;
+import tictactoe.models.Player;
+import tictactoe.models.Position;
+import tictactoe.services.BoardService;
+import tictactoe.services.GameService;
 
 import java.util.*;
 

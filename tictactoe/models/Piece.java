@@ -1,4 +1,4 @@
-package tictactoe.model;
+package tictactoe.models;
 
 public enum Piece {
     X,

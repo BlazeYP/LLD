@@ -3,10 +3,10 @@ package tictactoe.serviceImpl;
 import tictactoe.utilities.Constants;
 import tictactoe.exceptions.InvalidPositionException;
 import tictactoe.exceptions.AlreadyOccupiedException;
-import tictactoe.model.Board;
-import tictactoe.model.Piece;
-import tictactoe.model.Position;
-import tictactoe.service.BoardService;
+import tictactoe.models.Board;
+import tictactoe.models.Piece;
+import tictactoe.models.Position;
+import tictactoe.services.BoardService;
 
 import java.util.ArrayList;
 import java.util.List;

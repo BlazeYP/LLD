@@ -1,9 +1,9 @@
-package tictactoe.service;
+package tictactoe.services;
 
 import tictactoe.exceptions.AlreadyOccupiedException;
 import tictactoe.exceptions.InvalidPositionException;
-import tictactoe.model.Piece;
-import tictactoe.model.Position;
+import tictactoe.models.Piece;
+import tictactoe.models.Position;
 
 public interface BoardService {
     void initialise();

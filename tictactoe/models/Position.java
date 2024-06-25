@@ -1,4 +1,4 @@
-package tictactoe.model;
+package tictactoe.models;
 
 public class Position {
     private int x;

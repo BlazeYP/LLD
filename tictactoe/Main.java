@@ -1,12 +1,12 @@
 package tictactoe;
 
 import tictactoe.exceptions.InputParseException;
-import tictactoe.model.Board;
-import tictactoe.model.Piece;
-import tictactoe.model.Player;
-import tictactoe.model.Position;
-import tictactoe.service.BoardService;
-import tictactoe.service.GameService;
+import tictactoe.models.Board;
+import tictactoe.models.Piece;
+import tictactoe.models.Player;
+import tictactoe.models.Position;
+import tictactoe.services.BoardService;
+import tictactoe.services.GameService;
 import tictactoe.serviceImpl.BoardServiceImpl;
 import tictactoe.serviceImpl.GameServiceImpl;
 import tictactoe.utilities.Constants;

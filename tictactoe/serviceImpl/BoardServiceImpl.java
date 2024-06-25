@@ -1,6 +1,6 @@
 package tictactoe.serviceImpl;
 
-import tictactoe.Constants;
+import tictactoe.utilities.Constants;
 import tictactoe.exceptions.InvalidPositionException;
 import tictactoe.exceptions.AlreadyOccupiedException;
 import tictactoe.model.Board;

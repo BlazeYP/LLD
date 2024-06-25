@@ -1,4 +1,4 @@
-package tictactoe;
+package tictactoe.utilities;
 
 public interface Constants {
     String SEPARATOR = " ";

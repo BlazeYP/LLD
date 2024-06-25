@@ -9,6 +9,7 @@ import tictactoe.service.BoardService;
 import tictactoe.service.GameService;
 import tictactoe.serviceImpl.BoardServiceImpl;
 import tictactoe.serviceImpl.GameServiceImpl;
+import tictactoe.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Main {
         List<Player> playerList = new ArrayList<>();
 
         for(int count=1; count<=noOfPlayers; count++){
-            System.out.print("Enter "+ count + " player name: ");
+            System.out.println("Enter %d player name which takes '%s' piece".formatted(count, Piece.values()[count-1].toString()));
             Player p = new Player(scanner.nextLine(), Piece.values()[count-1]);
             playerList.add(p);
         }

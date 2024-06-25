@@ -1,6 +1,6 @@
 package tictactoe.serviceImpl;
 
-import tictactoe.Constants;
+import tictactoe.utilities.Constants;
 import tictactoe.exceptions.InvalidPositionException;
 import tictactoe.exceptions.AlreadyOccupiedException;
 import tictactoe.model.Board;
@@ -26,7 +26,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void addPiece(Position position, Piece piece) throws Exception{
+    public void addPiece(Position position, Piece piece) throws AlreadyOccupiedException, InvalidPositionException {
         if(isPositionValid(position)){
             if(!this.occupiedPositions.contains(position)) {
                 this.board.getGrid()[position.getX()][position.getY()] = piece;
@@ -35,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
                 throw new AlreadyOccupiedException("ERROR | Already occupied position!");
             }
         } else {
-            throw new InvalidPositionException("ERROR | Invalid Position to add on!");
+            throw new InvalidPositionException("ERROR | Invalid Position to add piece on!");
         }
     }
 
@@ -46,9 +46,10 @@ public class BoardServiceImpl implements BoardService {
         for(int row=0; row<size; row++){
             for(int col=0; col<size; col++){
                 if(null != this.board.getGrid()[row][col]) {
-                    System.out.print(this.board.getGrid()[row][col]);
+                    System.out.print(Constants.SEPARATOR + this.board.getGrid()[row][col] + Constants.SEPARATOR);
+                } else {
+                    System.out.print(Constants.SEPARATOR + Constants.EMPTY_CELL_SIGNIFIER + Constants.SEPARATOR);
                 }
-                System.out.print(Constants.separator);
             }
             System.out.println();
         }
@@ -72,7 +73,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Piece getPiece(Position p) throws Exception{
+    public Piece getPiece(Position p) throws InvalidPositionException{
         if(isPositionValid(p)){
             return this.board.getGrid()[p.getX()][p.getY()];
         } else {
@@ -87,7 +88,7 @@ public class BoardServiceImpl implements BoardService {
 
     private List<Position> getOccupiedPositions(){
         List<Position> occupiedPositions = new ArrayList<>();
-        for(int rowNo=0; rowNo< board.getSize(); rowNo++){
+        for(int rowNo=0; rowNo < board.getSize(); rowNo++){
             for(int colNo=0; colNo < board.getSize(); colNo++ ){
                 if(null != board.getGrid()[rowNo][colNo]){
                     Position p = new Position(rowNo, colNo);

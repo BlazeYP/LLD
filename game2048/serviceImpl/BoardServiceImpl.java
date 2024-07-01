@@ -6,40 +6,33 @@ import game2048.services.BoardService;
 import game2048.services.RandomPositionGeneratorService;
 import game2048.utilities.Constants;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class BoardServiceImpl implements BoardService {
     private Board board;
 
     private int boardSize;
-    private Set<Position> occupiedPositions;
+    private List<Position> emptyPositions;
     private RandomPositionGeneratorService randomPositionGeneratorService;
 
-    public BoardServiceImpl(Board board) {
+    public BoardServiceImpl(Board board, RandomPositionGeneratorService randomPositionGeneratorService) {
         this.board = board;
+        this.randomPositionGeneratorService = randomPositionGeneratorService;
         this.boardSize = board.getSize();
     }
 
     @Override
     public void initialise() {
-        // Initialising empty set as occupied positions
-        this.occupiedPositions = new HashSet<>();
-        // Initialising 2 empty positions with base number;
-        Position p1 = this.randomPositionGeneratorService.generateRandomPosition(boardSize, boardSize, occupiedPositions);
-        board.getGrid()[p1.getX()][p1.getY()] = Constants.BASE_NUMBER;
-        this.occupiedPositions.add(p1);
-        Position p2 = this.randomPositionGeneratorService.generateRandomPosition(boardSize, boardSize, occupiedPositions);
-        board.getGrid()[p2.getX()][p2.getY()] = Constants.BASE_NUMBER;
-        this.occupiedPositions.add(p2);
+        // Initialising board with two tiles
+        this.insertTile();
+        this.insertTile();
     }
 
     @Override
     public void printBoard() {
         System.out.println();
-        for(int row=0; row<boardSize; row++){
-            for(int col=0; col<boardSize; col++){
+        for(int row=0; row<this.boardSize; row++){
+            for(int col=0; col<this.boardSize; col++){
                 if(Objects.nonNull(this.board.getGrid()[row][col])){
                     System.out.print(Constants.SEPARATOR + this.board.getGrid()[row][col] + Constants.SEPARATOR);
                 } else {
@@ -53,37 +46,141 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void reset() {
-        int size = this.board.getSize();
-        for(int row=0; row<size; row++){
-            for(int col=0; col<size; col++) {
+        for(int row=0; row<this.boardSize; row++){
+            for(int col=0; col<this.boardSize; col++) {
                 this.board.getGrid()[row][col] = null;
             }
         }
-        this.initialise();
+    }
+
+    @Override
+    public void insertTile() {
+        this.emptyPositions = getEmptyPositions();
+        Position p = this.randomPositionGeneratorService.generateRandomPosition(this.emptyPositions);
+        this.board.getGrid()[p.getX()][p.getY()] = Constants.BASE_NUMBER;
+        this.emptyPositions.remove(p);
+    }
+
+    private List<Position> getEmptyPositions() {
+        List<Position> emptyPositions = new ArrayList<>();
+        for(int row=0; row<this.boardSize; row++){
+            for(int col=0; col<this.boardSize; col++) {
+                if(Objects.isNull(this.board.getGrid()[row][col])){
+                    Position p = new Position(row, col);
+                    emptyPositions.add(p);
+                }
+            }
+        }
+        return emptyPositions;
     }
 
     @Override
     public void moveToLeft() {
-
+        for(int row=0; row<this.boardSize; row++){
+            int filledIndex = -1;
+            boolean isMergedCell = false;
+            for(int col=0; col<this.boardSize; col++) {
+                if(Objects.nonNull(this.board.getGrid()[row][col])){
+                    if(filledIndex != -1 && !isMergedCell && this.board.getGrid()[row][col] == this.board.getGrid()[row][filledIndex]) {
+                        this.board.getGrid()[row][filledIndex] *=2;
+                        isMergedCell = true;
+                    } else {
+                        filledIndex++;
+                        isMergedCell = false;
+                        this.board.getGrid()[row][filledIndex] = this.board.getGrid()[row][col];
+                    }
+                }
+            }
+            while(filledIndex < this.boardSize-1){
+                this.board.getGrid()[row][++filledIndex] = null;
+            }
+        }
     }
 
     @Override
     public void moveToRight() {
-
+        for(int row=0; row<this.boardSize; row++){
+            int filledIndex = this.boardSize;
+            boolean isMergedCell = false;
+            for(int col=this.boardSize-1; col>=0; col--) {
+                if(Objects.nonNull(this.board.getGrid()[row][col])){
+                    if(filledIndex != this.boardSize && !isMergedCell && this.board.getGrid()[row][col] == this.board.getGrid()[row][filledIndex]) {
+                        this.board.getGrid()[row][filledIndex] *=2;
+                        isMergedCell = true;
+                    } else {
+                        filledIndex--;
+                        isMergedCell = false;
+                        this.board.getGrid()[row][filledIndex] = this.board.getGrid()[row][col];
+                    }
+                }
+            }
+            while(filledIndex >0){
+                this.board.getGrid()[row][--filledIndex] = null;
+            }
+        }
     }
 
     @Override
     public void moveToTop() {
-
+        for(int col=0; col<this.boardSize; col++){
+            int filledIndex = -1;
+            boolean isMergedCell = false;
+            for(int row=0; row<this.boardSize; row++) {
+                if(Objects.nonNull(this.board.getGrid()[row][col])){
+                    if(filledIndex != -1 && !isMergedCell && this.board.getGrid()[row][col] == this.board.getGrid()[filledIndex][col]) {
+                        this.board.getGrid()[filledIndex][col] *=2;
+                        isMergedCell = true;
+                    } else {
+                        filledIndex++;
+                        isMergedCell = false;
+                        this.board.getGrid()[filledIndex][col] = this.board.getGrid()[row][col];
+                    }
+                }
+            }
+            while(filledIndex < this.boardSize-1){
+                this.board.getGrid()[++filledIndex][col] = null;
+            }
+        }
     }
 
     @Override
     public void moveToBottom() {
-
+        for(int col=0; col<this.boardSize; col++){
+            int filledIndex = this.boardSize;
+            boolean isMergedCell = false;
+            for(int row=this.boardSize-1; row>=0; row--) {
+                if(Objects.nonNull(this.board.getGrid()[row][col])){
+                    if(filledIndex != this.boardSize && !isMergedCell && this.board.getGrid()[row][col] == this.board.getGrid()[filledIndex][col]) {
+                        this.board.getGrid()[filledIndex][col] *=2;
+                        isMergedCell = true;
+                    } else {
+                        filledIndex--;
+                        isMergedCell = false;
+                        this.board.getGrid()[filledIndex][col] = this.board.getGrid()[row][col];
+                    }
+                }
+            }
+            while(filledIndex >0){
+                this.board.getGrid()[--filledIndex][col] = null;
+            }
+        }
     }
 
     @Override
     public boolean isBoardFull() {
+        this.emptyPositions = getEmptyPositions();
+        return this.emptyPositions.size() == 0;
+    }
+
+    @Override
+    public boolean hasGoalValue() {
+        for(int row=0; row<this.boardSize; row++){
+            for(int col=0; col<this.boardSize; col++) {
+                if(Objects.nonNull(this.board.getGrid()[row][col]) && Constants.GOAL_VALUE == this.board.getGrid()[row][col]) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

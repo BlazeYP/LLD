@@ -38,7 +38,7 @@ public class SplitwiseGateWayService {
 
                     //Getting sharedAmountList
                     ArrayList<Double> sharedAmountList = new ArrayList<>();
-                    for(int i = 4 + totalSplits + 2; i <tokens.size(); i++){
+                    for(int i = 4 + totalSplits + 1; i <tokens.size(); i++){
                         sharedAmountList.add(Double.parseDouble(tokens.get(i)));
                     }
                     splitwiseService.addExpense(payerUserId, borrowerUserList, totalAmount, splitType, sharedAmountList);

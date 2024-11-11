@@ -69,10 +69,14 @@ public class SplitwiseRecordServiceImpl implements SplitwiseRecordService {
     @Override
     public boolean deleteRecord(String expenseId) {
         ArrayList<ExpenseRecord> expenseRecords = splitwiseRecords.getExpenseRecords();
+        ExpenseRecord selectedRecord = null;
         for(ExpenseRecord expenseRecord : expenseRecords) {
             if(expenseRecord.getExpenseId().equalsIgnoreCase(expenseId)) {
-                expenseRecords.remove(expenseRecord);
+                selectedRecord = expenseRecord;
             }
+        }
+        if(Objects.nonNull(selectedRecord)) {
+            expenseRecords.remove(selectedRecord);
         }
         return true;
     }

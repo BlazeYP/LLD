@@ -56,7 +56,7 @@ public class SplitwiseServiceImpl implements SplitwiseService {
                                         ,selectedExpenseRecord.getBorrowerUserId(), selectedExpenseRecord.getAmount() - newExpenseRecord.getAmount());
                             } else {
                                 splitwiseRecordService.deleteRecord(selectedExpenseRecord.getExpenseId());
-                                splitwiseRecordService.addRecord(newExpenseRecord.getPayerUserId(), newExpenseRecord.getBorrowerUserId(), remainingAmount);
+                                splitwiseRecordService.addRecord(newExpenseRecord.getPayerUserId(), newExpenseRecord.getBorrowerUserId(), -1*remainingAmount);
                             }
                         }
                     } else {

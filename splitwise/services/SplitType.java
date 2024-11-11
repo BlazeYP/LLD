@@ -35,7 +35,7 @@ public abstract class SplitType {
             case "EXACT":
                 splitTypeObject = new ExactSplit();
                 break;
-            case "PERCENTAGE":
+            case "PERCENT":
                 splitTypeObject = new PercentageSplit();
         }
         return splitTypeObject;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
-public class SplitwiseGateWayService {
+public class SplitwiseCmdParserService {
     public static void execute(String s, SplitwiseService splitwiseService) {
         if(Objects.nonNull(s) && !s.isBlank()) {
             // Creating a StringTokenizer with space as the default delimiter

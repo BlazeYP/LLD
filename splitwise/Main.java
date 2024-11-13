@@ -41,7 +41,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         while(true){
             String s = sc.nextLine();
-            SplitwiseGateWayService.execute(s, splitwiseService);
+            SplitwiseCmdParserService.execute(s, splitwiseService);
         }
     }
 }

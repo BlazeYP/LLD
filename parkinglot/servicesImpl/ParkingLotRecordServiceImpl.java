@@ -4,6 +4,7 @@ import parkinglot.exceptions.ParkingLotRecordServiceException;
 import parkinglot.models.*;
 import parkinglot.services.ParkingLotRecordService;
 import parkinglot.services.UniqueIdGeneratorService;
+import parkinglot.utilities.ParkingSystemMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,48 +23,47 @@ public class ParkingLotRecordServiceImpl implements ParkingLotRecordService {
     }
 
     @Override
-    public void createParkingLot(String parkingLotName, String parkingLotAddress, int floorCount, Map<Integer, List<String>> slots) throws ParkingLotRecordServiceException {
+    public void createParkingLot(String parkingLotName, String parkingLotAddress, int floorCount, Map<Integer, List<String>> floors) throws ParkingLotRecordServiceException {
         String parkingLotId = uniqueIdGeneratorService.getUniqueId().toString();
+
         ParkingLot parkingLot = new ParkingLot();
         // TODO: 17/01/2025  Add validations
+
         //Setting fields
         parkingLot.setParkingLotId(parkingLotId);
         parkingLot.setParkingLotName(parkingLotName);
         parkingLot.setParkingLotAddress(parkingLotAddress);
         parkingLot.setFloorCount(floorCount);
 
-        ArrayList<ParkingFloor> parkingFloors = new ArrayList<>();
         //Adding parking floors
+        ArrayList<ParkingFloor> parkingFloors = new ArrayList<>();
         for(int floorIdx=0; floorIdx < floorCount; floorIdx++ ) {
-            ParkingFloor parkingFloor = new ParkingFloor(floorIdx+1, null);
-            ArrayList<String> parkingSlotTypeList = (ArrayList<String>) slots.get(floorIdx);
+            ParkingFloor parkingFloor = new ParkingFloor(floorIdx, null);
+            parkingFloors.add(parkingFloor);
+        }
 
-            if(Objects.nonNull(parkingSlotTypeList) && parkingSlotTypeList.size() != 0) {
-                parkingFloor.setParkingSlots(new ArrayList<>());
-                for(int slotIdx=0; slotIdx < parkingSlotTypeList.size(); slotIdx++) {
-                    SlotType slotTypeEnum = null;
-                    String slotType = parkingSlotTypeList.get(slotIdx);
-                    switch(slotType.toUpperCase()) {
-                        case "S":
-                            slotTypeEnum = SlotType.SMALL;
-                            break;
-                        case "M":
-                            slotTypeEnum = SlotType.MEDIUM;
-                            break;
-                        case "L":
-                            slotTypeEnum = SlotType.LARGE;
-                            break;
-                        default:
-                            throw new ParkingLotRecordServiceException("Invalid slot type supplied at floor %d and slot position %d".formatted(floorIdx+1, slotIdx+1));
-
+        //Adding slots to each given floor
+        for(Map.Entry<Integer, List<String>> floor : floors.entrySet()) {
+            int floorNumber = floor.getKey();
+            List<String> floorSlotTypes = floor.getValue();
+            ArrayList<ParkingSlot> parkingSlots = null;
+            if(Objects.nonNull(floorSlotTypes) && floorSlotTypes.size() != 0) {
+                parkingSlots = new ArrayList<>();
+                //Making parking slots
+                for(int slotIdx=0; slotIdx < floorSlotTypes.size(); slotIdx++) {
+                    String slotType = floorSlotTypes.get(slotIdx);
+                    SlotType slotTypeEnum = ParkingSystemMapper.mapSlotTypeStringToSlotType(slotType);
+                    if(Objects.isNull(slotTypeEnum)) {
+                        throw new ParkingLotRecordServiceException("Slot type not recognised!!");
                     }
-                    String parkingSlotId = generateParkingSlotId(parkingLotId, floorIdx, slotIdx);
-                    ParkingSlot parkingSlot = new ParkingSlot(parkingSlotId, floorIdx+1, slotIdx+1, slotTypeEnum, false);
-                    parkingFloor.getParkingSlots().add(parkingSlot);
+                    String parkingSlotId = generateParkingSlotId(parkingLotId, floorNumber, slotIdx);
+                    ParkingSlot parkingSlot = new ParkingSlot(parkingSlotId, floorNumber+1, slotIdx+1, slotTypeEnum, false);
+                    parkingSlots.add(parkingSlot);
                 }
             }
-            parkingLot.setParkingFloors(parkingFloors);
+            parkingFloors.get(floorNumber).setParkingSlots(parkingSlots);
         }
+        parkingLot.setParkingFloors(parkingFloors);
         parkingLotRecords.getParkingLots().add(parkingLot);
     }
 
@@ -97,12 +97,25 @@ public class ParkingLotRecordServiceImpl implements ParkingLotRecordService {
     }
 
     @Override
-    public void addParkingSlots(String parkingLotId, int floorNo, int slots, List<SlotType> slotTypes) throws ParkingLotRecordServiceException {
+    public void addParkingSlots(String parkingLotId, int floorNo, int slots, List<String> slotTypes) throws ParkingLotRecordServiceException {
         ParkingLot selectedparkingLot = getParkingLot(parkingLotId, parkingLotRecords.getParkingLots());
         if(Objects.nonNull(selectedparkingLot)) {
-
+            //Todo: add validation for floor number
+            ParkingFloor parkingFloor = selectedparkingLot.getParkingFloors().get(floorNo);
+            ArrayList<ParkingSlot> parkingSlots = parkingFloor.getParkingSlots();
+            int currentSlotCount = parkingFloor.getParkingSlots().size();
+            for(int slotIdx=0; slotIdx < slots; slotIdx++){
+                SlotType slotType = ParkingSystemMapper.mapSlotTypeStringToSlotType(slotTypes.get(slotIdx));
+                if(Objects.isNull(slotType)) {
+                    throw new ParkingLotRecordServiceException("Slot type is invalid!!");
+                }
+                int newSlotNumber = currentSlotCount + slotIdx;
+                String parkingSlotId = generateParkingSlotId(selectedparkingLot.getParkingLotId(), floorNo,newSlotNumber);
+                ParkingSlot parkingSlot = new ParkingSlot(parkingSlotId, floorNo, newSlotNumber, slotType, false);
+                parkingSlots.add(parkingSlot);
+            }
         } else {
-            throw new ParkingLotRecordServiceException("No such parkingLot exist!!");
+            throw new ParkingLotRecordServiceException("No such parking Lot exist!!");
         }
     }
 

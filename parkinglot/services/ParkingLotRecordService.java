@@ -10,7 +10,7 @@ public interface ParkingLotRecordService {
     // CRUD services for parking lots
     void createParkingLot(String parkingLotName, String parkingLotAddress, int floorCount, Map<Integer, List<String>> slots) throws ParkingLotRecordServiceException;
     void addFloors(String parkingLotId, int floors) throws ParkingLotRecordServiceException;
-    void addParkingSlots(String parkingLotId, int floorNo, int slots, List<SlotType> slotTypes) throws ParkingLotRecordServiceException;
+    void addParkingSlots(String parkingLotId, int floorNo, int slots, List<String> slotTypes) throws ParkingLotRecordServiceException;
     void deleteParkingLot(String parkingLotId);
     void deleteParkingFloor(String parkingLotId, int floorNumber);
     void deleteParkingSlot(String parkingLotId, int floorNumber, int slotNumber);

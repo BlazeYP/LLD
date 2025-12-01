@@ -1,5 +1,7 @@
 package tictactoe.models;
 
+import java.util.Scanner;
+
 public class Player {
     private String name;
     private Piece playingPiece;
@@ -23,5 +25,11 @@ public class Player {
 
     public void setPlayingPiece(Piece playingPiece) {
         this.playingPiece = playingPiece;
+    }
+
+    public Position getMove() {
+        System.out.println(this.name + ", enter position: ");
+        Scanner sc = new Scanner(System.in);
+        return new Position(sc.nextInt(), sc.nextInt());
     }
 }

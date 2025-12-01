@@ -18,10 +18,10 @@ public class BoardServiceImpl implements BoardService {
 
     public BoardServiceImpl(Board board) {
         this.board = board;
+        initialise();
     }
 
-    @Override
-    public void initialise() {
+    private void initialise() {
         this.occupiedPositions = this.getOccupiedPositions();
     }
 

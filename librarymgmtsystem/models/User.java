@@ -1,14 +1,29 @@
 package librarymgmtsystem.models;
 
-public class User extends Person{
-    private Integer borrowedBooksCount;
+import java.util.UUID;
 
+public class User {
+    private UUID uuid;
+    private String name;
 
-    public Integer getBorrowedBooksCount() {
-        return borrowedBooksCount;
+    public User(UUID uuid, String name) {
+        this.uuid = uuid;
+        this.name = name;
     }
 
-    public void setBorrowedBooksCount(Integer borrowedBooksCount) {
-        this.borrowedBooksCount = borrowedBooksCount;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
